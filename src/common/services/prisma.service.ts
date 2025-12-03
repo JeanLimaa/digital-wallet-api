@@ -26,6 +26,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       return obj.toNumber();
     }
 
+    // Preserve Date objects as-is
+    if (obj instanceof Date) {
+      return obj;
+    }
+
     if (Array.isArray(obj)) {
       return obj.map((item) => this.convertDecimalToNumber(item));
     }
