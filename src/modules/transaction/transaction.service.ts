@@ -28,6 +28,13 @@ export class TransactionsService {
       this.prisma.user.update({
         where: { id: userId },
         data: { balance: { increment: dto.amount } },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          balance: true,
+          createdAt: true,
+        },
       }),
       this.prisma.transaction.create({
         data: {

@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuthResponseDto } from './dto/response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -18,11 +19,7 @@ export class AuthController {
   @ApiResponse({ 
     status: 201, 
     description: 'Usuário cadastrado com sucesso',
-    schema: {
-      properties: {
-        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' }
-      }
-    }
+    type: AuthResponseDto,
   })
   @ApiResponse({ status: 409, description: 'E-mail já cadastrado' })
   @ApiResponse({ status: 400, description: 'Dados de entrada inválidos' })
@@ -37,13 +34,9 @@ export class AuthController {
   })
   @ApiBody({ type: LoginDto })
   @ApiResponse({ 
-    status: 200, 
+    status: 201, 
     description: 'Login realizado com sucesso',
-    schema: {
-      properties: {
-        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' }
-      }
-    }
+    type: AuthResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   login(@Body() dto: LoginDto) {

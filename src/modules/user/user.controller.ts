@@ -3,6 +3,11 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@ne
 import { UserService } from "./user.service";
 import { GetUser } from "src/common/decorators/GetUser.decorator";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
+import { 
+    UserProfileResponseDto, 
+    UserPublicProfileResponseDto, 
+    UserBalanceResponseDto 
+} from "./dto/response.dto";
 
 @ApiTags('User')
 @ApiBearerAuth('JWT-auth')
@@ -19,13 +24,7 @@ export class UserController {
     @ApiResponse({ 
         status: 200, 
         description: 'Dados do perfil',
-        schema: {
-            properties: {
-                id: { type: 'string' },
-                name: { type: 'string', example: 'João Silva' },
-                email: { type: 'string', example: 'joao@email.com' },
-            }
-        }
+        type: UserProfileResponseDto,
     })
     @ApiResponse({ status: 401, description: 'Não autorizado' })
     getMyProfile(
@@ -43,12 +42,7 @@ export class UserController {
     @ApiResponse({ 
         status: 200, 
         description: 'Dados públicos do usuário',
-        schema: {
-            properties: {
-                name: { type: 'string', example: 'Maria Santos' },
-                email: { type: 'string', example: 'maria@email.com' },
-            }
-        }
+        type: UserPublicProfileResponseDto,
     })
     @ApiResponse({ status: 401, description: 'Não autorizado' })
     @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
@@ -66,11 +60,7 @@ export class UserController {
     @ApiResponse({ 
         status: 200, 
         description: 'Saldo da carteira',
-        schema: {
-            properties: {
-                balance: { type: 'number', example: 1500.50 },
-            }
-        }
+        type: UserBalanceResponseDto,
     })
     @ApiResponse({ status: 401, description: 'Não autorizado' })
     getBalance(

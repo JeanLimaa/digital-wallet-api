@@ -4,6 +4,12 @@ import { TransactionsService } from './transaction.service';
 import { CreateDepositDto } from './dto/create-deposit.dto';
 import { CreateTransferDto } from './dto/create-transfer.dto';
 import { ReverseTransactionDto } from './dto/reverse-transaction.dto';
+import { 
+  DepositResponseDto, 
+  TransferResponseDto, 
+  ReverseResponseDto, 
+  TransactionHistoryItemDto 
+} from './dto/response.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { GetUser } from '../../common/decorators/GetUser.decorator';
 
@@ -22,26 +28,7 @@ export class TransactionsController {
   @ApiResponse({ 
     status: 201, 
     description: 'Depósito realizado com sucesso',
-    schema: {
-      properties: {
-        updatedUser: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            balance: { type: 'number', example: 150.00 },
-          }
-        },
-        transaction: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            type: { type: 'string', example: 'DEPOSIT' },
-            amount: { type: 'number', example: 100.00 },
-            status: { type: 'string', example: 'COMPLETED' },
-          }
-        }
-      }
-    }
+    type: DepositResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
@@ -60,16 +47,7 @@ export class TransactionsController {
   @ApiResponse({ 
     status: 201, 
     description: 'Transferência realizada com sucesso',
-    schema: {
-      properties: {
-        id: { type: 'string' },
-        type: { type: 'string', example: 'TRANSFER' },
-        amount: { type: 'number', example: 50.00 },
-        status: { type: 'string', example: 'COMPLETED' },
-        fromUserId: { type: 'string' },
-        toUserId: { type: 'string' },
-      }
-    }
+    type: TransferResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Saldo insuficiente ou dados inválidos' })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
@@ -95,11 +73,7 @@ export class TransactionsController {
   @ApiResponse({ 
     status: 201, 
     description: 'Transação revertida com sucesso',
-    schema: {
-      properties: {
-        message: { type: 'string', example: 'Transação revertida com sucesso' }
-      }
-    }
+    type: ReverseResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Transação já foi revertida ou não pode ser revertida' })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
@@ -120,21 +94,7 @@ export class TransactionsController {
   @ApiResponse({ 
     status: 200, 
     description: 'Lista de transações',
-    schema: {
-      type: 'array',
-      items: {
-        properties: {
-          id: { type: 'string' },
-          type: { type: 'string', enum: ['DEPOSIT', 'TRANSFER', 'REVERSAL', 'RECEIVED'] },
-          amount: { type: 'number' },
-          status: { type: 'string', enum: ['COMPLETED', 'REVERSED'] },
-          isPositive: { type: 'boolean' },
-          createdAt: { type: 'string', format: 'date-time' },
-          fromUser: { type: 'object', nullable: true },
-          toUser: { type: 'object', nullable: true },
-        }
-      }
-    }
+    type: [TransactionHistoryItemDto],
   })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
   getTransactionHistory(
